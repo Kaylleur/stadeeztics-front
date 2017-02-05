@@ -7,6 +7,7 @@ import { AppComponent } from './app.component';
 import {routing} from "./app.routing";
 import { HomeComponent } from './home/home.component';
 import 'hammerjs';
+import {SessionService} from "./services/session.service";
 
 
 @NgModule({
@@ -21,7 +22,7 @@ import 'hammerjs';
     routing,
     MaterialModule.forRoot()
   ],
-  providers: [],
+  providers: [SessionService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

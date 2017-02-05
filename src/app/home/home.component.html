@@ -1,3 +1,16 @@
-<h2>
-  Welcome to home bro !
-</h2>
+<md-grid-list cols="12" rowHeight="100px">
+  <md-grid-tile [colspan]="12">
+    <md-input-container>
+      <input md-input placeholder="Email" type="email" #mail>
+    </md-input-container>
+    </md-grid-tile>
+    <md-grid-tile [colspan]="12">
+    <md-input-container>
+      <input md-input placeholder="Password" type="password" #password>
+    </md-input-container>
+  </md-grid-tile>
+  <md-grid-tile [colspan]="12">
+      <button  color="accent" md-raised-button>Sign up</button>
+      <button color="primary" md-raised-button (click)="signIn(mail.value,password.value)">Sign in</button>
+  </md-grid-tile>
+</md-grid-list>
