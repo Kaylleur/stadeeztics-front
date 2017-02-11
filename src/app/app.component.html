@@ -1,4 +1,20 @@
 <md-toolbar color="primary">
-  <span>Stadeeztics</span>
+  <a routerLinkActive="active" routerLink="/home"><button md-button>Stadeeztics</button></a>
+  <span class="spacer"></span>
+
+  <button md-button *ngIf="user != null" [mdMenuTriggerFor]="menu">
+    <span>{{user.name}}</span>
+    <md-icon>more_vert</md-icon>
+  </button>
+  <md-menu #menu="mdMenu">
+    <button md-menu-item>
+      <md-icon>account_circle</md-icon>
+      <span>Profile</span>
+    </button>
+    <button md-menu-item>
+      <md-icon>exit_to_app</md-icon>
+      <span >Sign Out</span>
+    </button>
+  </md-menu>
 </md-toolbar>
 <router-outlet></router-outlet>

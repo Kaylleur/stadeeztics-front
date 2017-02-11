@@ -1,19 +1,23 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
-import {routing} from "./app.routing";
+import {routing} from './app.routing';
 import { HomeComponent } from './home/home.component';
 import 'hammerjs';
-import {SessionService} from "./services/session.service";
+import {SessionService} from './services/session.service';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent
+    HomeComponent,
+    PageNotFoundComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -22,7 +26,10 @@ import {SessionService} from "./services/session.service";
     routing,
     MaterialModule.forRoot()
   ],
-  providers: [SessionService],
+  providers: [
+    SessionService
+  ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+}
