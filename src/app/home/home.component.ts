@@ -2,6 +2,8 @@ import {Component, OnInit, Input} from '@angular/core';
 import {SessionService} from "../services/session.service";
 import {SessionRequest} from "../models/sessionRequest";
 import {Router} from "@angular/router";
+import {UserService} from "../services/user.service";
+import {User} from "../models/user";
 
 @Component({
   selector: 'app-home',
@@ -9,13 +11,20 @@ import {Router} from "@angular/router";
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  private formConnection : boolean;
 
   constructor(
     private sessionService : SessionService,
+    private userService : UserService,
     private router : Router) {
   }
 
   ngOnInit() {
+    this.formConnection = localStorage.getItem('session_token') == null;
+    this.userService.userEvent$.subscribe(
+      user => {
+        this.formConnection = user == null;
+      });
 
   }
 
@@ -23,14 +32,8 @@ export class HomeComponent implements OnInit {
     let sessionRequest = new SessionRequest(mail, password);
     this.sessionService.signIn(sessionRequest)
       .then(sessionResponse => {
-        localStorage.setItem('session_token' , sessionResponse.token);
-        localStorage.setItem('userId' , sessionResponse.user._id);
-        localStorage.setItem('userName' , sessionResponse.user.name);
-
-        this.sessionService.connectionValid(sessionResponse.user);
-
+        this.userService.setCurrentUser(sessionResponse.user);
         this.router.navigate(['/dashboard'])
       });
   }
-
 }

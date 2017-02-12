@@ -7,61 +7,54 @@ import 'rxjs/add/operator/toPromise';
 import {Observable, Subject} from 'rxjs';
 import {SignUpRequest} from '../models/signUpRequest';
 import {User} from '../models/user';
-import {environment} from "../../environments/environment.dev"; //TODO should not be dev or prod
+import {environment} from "../../environments/environment.dev";
+import {DefaultService} from "./defaultService"; //TODO should not be dev or prod
 
 @Injectable()
 export class SessionService {
 
-  private sessionUrl;
+  private sessionUrl: string;
 
-  private headers = new Headers({'Content-Type': 'application/json'});
-  private connectionEmitter = new Subject<User>(); //source
+  private headers : Headers;
 
-  connectionEmitter$ = this.connectionEmitter.asObservable();
 
   constructor(private http: Http) {
     this.sessionUrl = environment.apiUrl + '/session';
   }
 
-  private handleError (error: Response | any) {
-    // In a real world app, we might use a remote logging infrastructure
-    let errMsg: string;
-    if (error instanceof Response) {
-      const body = error.json() || '';
-      const err = body.error || JSON.stringify(body);
-      errMsg = `${error.status} - ${error.statusText || ''} ${err}`;
-    } else {
-      errMsg = error.message ? error.message : error.toString();
-    }
-    console.error(errMsg);
-    return Observable.throw(errMsg);
-  }
-
-
   signIn(req: SessionRequest): Promise<SessionResponse> {
-    return this.http.post(this.sessionUrl + '/signIn' , JSON.stringify(req), {headers: this.headers})
+    return this.http.post(this.sessionUrl + '/signIn' , req, {headers: this.headers})
       .toPromise()
-      .then(res => res.json())
-      .catch(this.handleError);
+      .then(res => {
+        let sessionResponse = <SessionResponse> res.json();
+        localStorage.setItem('session_token' , sessionResponse.token);
+        localStorage.setItem('userId' , sessionResponse.user._id);
+        localStorage.setItem('userName' , sessionResponse.user.name);
+        return sessionResponse;
+      })
+      .catch(DefaultService.handleError);
   }
-
 
   signUp(req: SignUpRequest): Promise<User> {
-    return this.http.post(this.sessionUrl, JSON.stringify(req), {headers: this.headers})
+    return this.http.post(this.sessionUrl, req, {headers: this.headers})
       .toPromise()
       .then(res => res.json())
-      .catch(this.handleError);
+      .catch(DefaultService.handleError);
   }
 
-  checkToken(token : string): Promise<Response> {
-    this.headers.append('x-access-token', token);
+  checkToken(token : string): Promise<Response> { //check if used TODO
+    this.headers= new Headers({'x-access-token': token});
     return this.http.get(this.sessionUrl + '/checkToken', {headers : this.headers})
       .toPromise()
       .then(res => res.json())
-      .catch(this.handleError);
+      .catch(DefaultService.handleError);
   }
 
-  connectionValid(user : User){
-    this.connectionEmitter.next(user);
+  checkTokenAuthGuard(token: string):Promise<boolean> {
+    this.headers= new Headers({'x-access-token': token});
+    return this.http.get(this.sessionUrl + '/checkToken', {headers : this.headers})
+      .toPromise()
+      .then(() => true)
+      .catch(() => false);
   }
 }

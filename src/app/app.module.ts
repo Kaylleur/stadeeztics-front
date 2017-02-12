@@ -10,6 +10,8 @@ import 'hammerjs';
 import {SessionService} from './services/session.service';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import {UserService} from "./services/user.service";
+import {AuthGuardService} from "./services/auth-guard.service";
 
 
 @NgModule({
@@ -27,7 +29,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MaterialModule.forRoot()
   ],
   providers: [
-    SessionService
+    SessionService,
+    UserService,
+    AuthGuardService
   ],
   bootstrap: [AppComponent]
 })
