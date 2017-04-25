@@ -6,6 +6,7 @@ export class User {
   name : string;
   password : string;
   mail : string;
+  gravatar: string;
   _id : string;
   deezerAccounts : string[];
 }

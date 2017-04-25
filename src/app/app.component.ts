@@ -11,12 +11,12 @@ import {UserService} from "./services/user.service";
 })
 export class AppComponent {
   private user : User = null;
+  private autoConnect : boolean;
 
 
   constructor (
-    private sessionService: SessionService,
     private userService: UserService,
-    private router: Router) {
+    private sessionService: SessionService) {
   }
 
   ngOnInit() {
@@ -24,29 +24,28 @@ export class AppComponent {
       user => {
         this.user = user;
       });
+    this.autoConnect = localStorage.getItem('rememberMe') != null;
+
+    if(!this.autoConnect) this.sessionService.signOut();
 
     /**
      * TODO
      * Do we want to always connect someone automatically ? where store token if no ?
      */
     let token = localStorage.getItem('session_token'); //check if already connected
-    if(token){
+    if(token != null && this.autoConnect){
       this.userService.getCurrentUser(token)
         .then(user => {
           this.userService.setCurrentUser(user);
         })
         .catch(err =>{
-          this.signOut();
+          this.sessionService.signOut();
           console.error(err);
         });
     }
   }
 
   signOut(){
-    this.userService.setCurrentUser(null);
-
-    localStorage.removeItem('session_token');
-    this.router.navigate(['/home']);
+    this.sessionService.signOut();
   }
-
 }

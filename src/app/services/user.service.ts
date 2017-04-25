@@ -24,17 +24,21 @@ export class UserService {
   }
 
   getCurrentUser(token : string):Promise<User> {
+    if(this.currentUser != null) return new Promise(res => this.currentUser);
     this.headers = new Headers({'x-access-token': token});
     return this.http.get(this.userUrl, new RequestOptions({method: 'GET',headers: this.headers}))
       .toPromise()
-      .then(res => res.json())
-      .catch(DefaultService.handleError);
+      .then(res => res.json());
+      // .catch(DefaultService.handleError);
   }
 
-  setCurrentUser(user : User){
-    this.currentUser = user;
-    localStorage.setItem('userId' , user._id);
-    localStorage.setItem('userName' , user.name);
+  setCurrentUser(user : User,rememberMe? : boolean){
+    if(user) {
+      this.currentUser = user;
+      localStorage.setItem('userId', user._id);
+      localStorage.setItem('userName', user.name);
+      if(rememberMe)localStorage.setItem("rememberMe","auto log in");
+    }
     this.userEvent.next(user);
   }
 }

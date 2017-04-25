@@ -8,7 +8,9 @@ import {Observable, Subject} from 'rxjs';
 import {SignUpRequest} from '../models/signUpRequest';
 import {User} from '../models/user';
 import {environment} from "../../environments/environment.dev";
-import {DefaultService} from "./defaultService"; //TODO should not be dev or prod
+import {DefaultService} from "./defaultService";
+import {UserService} from "./user.service";
+import {Router} from "@angular/router"; //TODO should not be dev or prod
 
 @Injectable()
 export class SessionService {
@@ -18,7 +20,9 @@ export class SessionService {
   private headers : Headers;
 
 
-  constructor(private http: Http) {
+  constructor(private http: Http,
+              private userService : UserService,
+              private router : Router) {
     this.sessionUrl = environment.apiUrl + '/session';
   }
 
@@ -56,5 +60,13 @@ export class SessionService {
       .toPromise()
       .then(() => true)
       .catch(() => false);
+  }
+
+  signOut(){
+    this.userService.setCurrentUser(null);
+
+    localStorage.removeItem('session_token');
+    localStorage.removeItem('rememberMe');
+    this.router.navigate(['/home']);
   }
 }

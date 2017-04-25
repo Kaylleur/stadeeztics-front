@@ -12,6 +12,7 @@ import {User} from "../models/user";
 })
 export class HomeComponent implements OnInit {
   private formConnection : boolean;
+  private rememberMe : boolean;
 
   constructor(
     private sessionService : SessionService,
@@ -20,7 +21,8 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.formConnection = localStorage.getItem('session_token') == null;
+    this.rememberMe = localStorage.getItem('rememberMe') != null;
+    this.formConnection = (localStorage.getItem('session_token') == null && !this.rememberMe);
     this.userService.userEvent$.subscribe(
       user => {
         this.formConnection = user == null;
@@ -32,7 +34,7 @@ export class HomeComponent implements OnInit {
     let sessionRequest = new SessionRequest(mail, password);
     this.sessionService.signIn(sessionRequest)
       .then(sessionResponse => {
-        this.userService.setCurrentUser(sessionResponse.user);
+        this.userService.setCurrentUser(sessionResponse.user,this.rememberMe);
         this.router.navigate(['/dashboard'])
       });
   }
