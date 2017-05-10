@@ -37,6 +37,7 @@ export class UserService {
       this.currentUser = user;
       localStorage.setItem('userId', user._id);
       localStorage.setItem('userName', user.name);
+      localStorage.setItem('gravatar',user.gravatar);
       if(rememberMe)localStorage.setItem("rememberMe","auto log in");
     }
     this.userEvent.next(user);

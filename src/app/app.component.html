@@ -54,13 +54,13 @@
 
                     <ul class="nav navbar-nav navbar-right">
                         <li *ngIf="user == null">
-                            <a href="#" data-toggle="modal" data-target="#sign-in" aria-expanded="false">
+                            <a href="#" data-toggle="modal" data-target="#signIn" aria-expanded="false">
                                 <i class="fa fa-sign-in"></i> Sign In
                             </a>
                         </li>
                         <li *ngIf="user != null">
                             <a href="#" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                                <img src="https://secure.gravatar.com/avatar/b5819e2343e70621c23cbb51b69b1c6e" alt="">John Doe
+                                <img src="{{user.gravatar}}" alt="">{{user.name}}
                                 <i class=" fa fa-angle-down"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-usermenu pull-right">
@@ -117,7 +117,7 @@
 
 
         <!--Modal-->
-        <user-sign-in ngModel="user"></user-sign-in>
+        <user-sign-in></user-sign-in>
         <!--Application start-->
 
         <div class="right_col" role="main">

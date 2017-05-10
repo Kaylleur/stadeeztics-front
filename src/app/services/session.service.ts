@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {Http, Headers, Response} from '@angular/http';
 import {SessionResponse} from '../models/sessionResponse';
-import {SessionRequest} from '../models/sessionRequest';
+import {SignInRequest} from '../models/signInRequest';
 
 import 'rxjs/add/operator/toPromise';
 import {Observable, Subject} from 'rxjs';
@@ -26,14 +26,12 @@ export class SessionService {
     this.sessionUrl = environment.apiUrl + '/session';
   }
 
-  signIn(req: SessionRequest): Promise<SessionResponse> {
+  signIn(req: SignInRequest): Promise<SessionResponse> {
     return this.http.post(this.sessionUrl + '/signIn' , req, {headers: this.headers})
       .toPromise()
       .then(res => {
         let sessionResponse = <SessionResponse> res.json();
         localStorage.setItem('session_token' , sessionResponse.token);
-        localStorage.setItem('userId' , sessionResponse.user._id);
-        localStorage.setItem('userName' , sessionResponse.user.name);
         return sessionResponse;
       })
       .catch(DefaultService.handleError);
