@@ -12,6 +12,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import {UserService} from "./services/user.service";
 import {AuthGuardService} from "./services/auth-guard.service";
 import { ProfileComponent } from './profile/profile.component';
+import { UserSignInComponent } from './user-sign-in/user-sign-in.component';
 
 
 @NgModule({
@@ -20,7 +21,8 @@ import { ProfileComponent } from './profile/profile.component';
     HomeComponent,
     PageNotFoundComponent,
     DashboardComponent,
-    ProfileComponent
+    ProfileComponent,
+    UserSignInComponent
   ],
   imports: [
     BrowserModule,
