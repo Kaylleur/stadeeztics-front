@@ -1,6 +1,7 @@
 /* tslint:disable:no-unused-variable */
 
 import { TestBed, async, inject } from '@angular/core/testing';
+import {} from '@types/jasmine'
 import { UserService } from './user.service';
 
 describe('UserService', () => {

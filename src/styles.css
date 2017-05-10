@@ -697,7 +697,7 @@ a:focus {
   top: 0;
   width: 100%;
 }
-.navbar-static-top ul {
+.navbar-static-top > nav > ul {
   padding-right:60px;
 }
 
