@@ -13,13 +13,6 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.user = new User();
-    this.user._id = "yesy";
-
-    setTimeout(function () {
-      this.user = new User();
-      this.user._id = "yesy";
-    },2000);
   }
 
 }

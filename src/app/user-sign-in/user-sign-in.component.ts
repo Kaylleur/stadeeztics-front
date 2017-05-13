@@ -4,6 +4,7 @@ import {SignInRequest} from "../models/signInRequest";
 import {Router} from "@angular/router";
 import {UserService} from "../services/user.service";
 import {SessionService} from "../services/session.service";
+import {SessionResponse} from "../models/sessionResponse";
 
 
 @Component({
@@ -13,6 +14,8 @@ import {SessionService} from "../services/session.service";
 })
 export class UserSignInComponent implements OnInit {
     @ViewChild('btnClose') closeBtn: ElementRef;
+
+    private errorMsg : string = '';
 
   constructor(
       private sessionService : SessionService,
@@ -24,16 +27,22 @@ export class UserSignInComponent implements OnInit {
 
 
   signIn(mail: string, password: string,rememberMe: boolean) {
-    let signInRequest = new SignInRequest(mail, password);
+    this.errorMsg = '';
+      let signInRequest = new SignInRequest(mail, password);
     this.sessionService.signIn(signInRequest)
-        .then(sessionResponse => {
-          this.userService.setCurrentUser(sessionResponse.user,rememberMe);
-          this.router.navigate(['/dashboard']);
-          this.closeBtn.nativeElement.click();
-        })
-        .catch(err => {
-            console.log(err);
-        });
+        .subscribe(
+            (sessionResponse:SessionResponse) => {
+              this.userService.setCurrentUser(new User(sessionResponse),sessionResponse.token,rememberMe);
+              this.router.navigate(['/dashboard']);
+              this.closeBtn.nativeElement.click();
+            },
+            err => {
+                this.errorMsg = err.message;
+            });
   }
 
+
+    hideError(){
+      this.errorMsg = '';
+    }
 }

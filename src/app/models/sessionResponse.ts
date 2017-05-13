@@ -4,5 +4,9 @@ import {User} from "./user";
  */
 export class SessionResponse {
   token : string;
-  user : User;
+  user : {
+    _id : string,
+    name : string,
+    gravatar : string
+  };
 }

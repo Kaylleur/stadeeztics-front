@@ -4,13 +4,13 @@ import {SessionResponse} from '../models/sessionResponse';
 import {SignInRequest} from '../models/signInRequest';
 
 import 'rxjs/add/operator/toPromise';
-import {Observable, Subject} from 'rxjs';
 import {SignUpRequest} from '../models/signUpRequest';
 import {User} from '../models/user';
 import {environment} from "../../environments/environment.dev";
 import {DefaultService} from "./defaultService";
 import {UserService} from "./user.service";
-import {Router} from "@angular/router"; //TODO should not be dev or prod
+import {Router} from "@angular/router";
+import {Observable} from "rxjs"; //TODO should not be dev or prod
 
 @Injectable()
 export class SessionService {
@@ -26,14 +26,9 @@ export class SessionService {
     this.sessionUrl = environment.apiUrl + '/session';
   }
 
-  signIn(req: SignInRequest): Promise<SessionResponse> {
+  signIn(req: SignInRequest): Observable<SessionResponse> {
     return this.http.post(this.sessionUrl + '/signIn' , req, {headers: this.headers})
-      .toPromise()
-      .then(res => {
-        let sessionResponse = <SessionResponse> res.json();
-        localStorage.setItem('session_token' , sessionResponse.token);
-        return sessionResponse;
-      })
+      .map(DefaultService.extractData)
       .catch(DefaultService.handleError);
   }
 

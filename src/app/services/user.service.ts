@@ -32,13 +32,14 @@ export class UserService {
       // .catch(DefaultService.handleError);
   }
 
-  setCurrentUser(user : User,rememberMe? : boolean){
+  setCurrentUser(user : User,token? : string,rememberMe? : boolean){
     if(user) {
       this.currentUser = user;
       localStorage.setItem('userId', user._id);
       localStorage.setItem('userName', user.name);
       localStorage.setItem('gravatar',user.gravatar);
-      if(rememberMe)localStorage.setItem("rememberMe","auto log in");
+      if(token) localStorage.setItem('session_token',token);
+      if(rememberMe) localStorage.setItem("rememberMe","auto log in");
     }
     this.userEvent.next(user);
   }

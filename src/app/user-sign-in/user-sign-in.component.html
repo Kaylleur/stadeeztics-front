@@ -1,6 +1,6 @@
 
 <!-- Modal -->
-<div class="modal fade" id="signIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade themed-modal" id="signIn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -8,6 +8,10 @@
         <h4 class="modal-title" id="myModalLabel">Sign in</h4>
       </div>
       <div class="modal-body">
+        <div [hidden]="errorMsg === ''" class="alert alert-danger">
+          <button type="button" class="close" aria-label="Close" (click)="hideError()"><span aria-hidden="true">&times;</span></button>
+          {{errorMsg}}
+        </div>
         <form class="form-horizontal" >
           <div class="form-group">
             <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
@@ -33,8 +37,10 @@
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal" #btnClose><i class="fa fa-times"></i> Close</button>
-        <button type="button" class="btn btn-primary" (click)="signIn(mail.value,password.value,rememberMe.value)"><i class="fa fa-sign-in"></i> Sign In</button>
+        <div class="btn-group">
+          <button type="button" class="btn btn-default" data-dismiss="modal" #btnClose><i class="fa fa-times"></i> Close</button>
+          <button type="button" class="btn btn-default" (click)="signIn(mail.value,password.value,rememberMe.checked)"><i class="fa fa-sign-in"></i> Sign In</button>
+        </div>
       </div>
     </div>
   </div>
